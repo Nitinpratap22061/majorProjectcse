@@ -29,47 +29,74 @@ if uploaded_file is not None:
     # Create a placeholder for video display
     video_placeholder = st.empty()
 
-    # Set the desired width and height for the display
+    # Set display dimensions
     display_width = 640
     display_height = 360
 
-    # Initialize frame counter for timestamp
+    # Initialize frame counter and skip frame rate for speed
     frame_count = 0
-    fps = video_file.get(cv2.CAP_PROP_FPS)  # Get frames per second of the video
+    fps = video_file.get(cv2.CAP_PROP_FPS)
+    skip_frames = 3  # Process every 3rd frame to speed up
 
-    # Process video frame by frame
+    # Initialize variable to track if emergency vehicle detected
+    emergency_detected = False
+    emergency_timestamp = ""
+
     while True:
-        ret, frame = video_file.read()
+        # Skip frames to process faster
+        for _ in range(skip_frames):
+            ret, frame = video_file.read()
+            if not ret:
+                st.write("End of video.")
+                break
+
         if not ret:
-            st.write("End of video.")
             break
 
         # Get predictions
         img_pred, predicted_texts, boxes = yolo.predictions(frame)
 
-        # Convert BGR image to RGB for display
+        # Convert BGR to RGB
         img_pred_rgb = cv2.cvtColor(img_pred, cv2.COLOR_BGR2RGB)
 
-        # Draw bounding boxes and labels on the frame
+        # Draw bounding boxes and labels with color change based on condition
         for i, text in enumerate(predicted_texts):
-            box = boxes[i]  # Assuming boxes is a list of [left, top, width, height]
+            box = boxes[i]  # Assuming boxes are [x, y, w, h]
             x, y, w, h = box
+            y += 30  # Shift the bounding box further below for more visibility
 
-            # Draw rectangle and label
-            cv2.rectangle(img_pred_rgb, (x, y), (x + w, y + h), (255, 0, 0), 2)  # Blue box
-            cv2.putText(img_pred_rgb, text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+            # Set label color and font size based on object type
+            color = (0, 0, 255) if "emergency" in text.lower() else (255, 0, 0)  # Red for emergency, blue otherwise
+            font_size = 0.7
+            font_thickness = 2
 
-        # Add timestamp to the video frame
+            # Draw bounding box
+            cv2.rectangle(img_pred_rgb, (x, y), (x + w, y + h), color, 2)
+
+            # Draw filled background rectangle for text label
+            (text_width, text_height), baseline = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, font_size, font_thickness)
+            cv2.rectangle(img_pred_rgb, (x, y + h + 5), (x + text_width, y + h + text_height + 15), (0, 0, 0), -1)
+
+            # Put text label below the bounding box
+            cv2.putText(img_pred_rgb, text, (x, y + h + 20), cv2.FONT_HERSHEY_SIMPLEX, font_size, (255, 255, 255), font_thickness)
+
+            # Check for emergency vehicle detection
+            if "emergency" in text.lower():
+                emergency_detected = True
+                emergency_timestamp = str(timedelta(seconds=int(frame_count / fps)))
+
+        # Add timestamp with background for visibility
         timestamp = str(timedelta(seconds=int(frame_count / fps)))
-        cv2.putText(img_pred_rgb, f'Time: {timestamp}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+        cv2.rectangle(img_pred_rgb, (5, 5), (170, 35), (0, 0, 0), -1)
+        cv2.putText(img_pred_rgb, f'Time: {timestamp}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
 
         # Resize the image for display
         img_resized = cv2.resize(img_pred_rgb, (display_width, display_height))
 
-        # Show predicted image in the placeholder
+        # Show predicted image in placeholder
         video_placeholder.image(img_resized, caption='Predicted Video Frame', use_column_width=True)
 
-        # Update predictions in the sidebar
+        # Sidebar updates
         st.sidebar.write("### Predictions")
         st.sidebar.write("Detected Objects:")
         if predicted_texts:
@@ -77,16 +104,18 @@ if uploaded_file is not None:
                 st.sidebar.write(text)
         else:
             st.sidebar.write("No objects detected.")
-
-        # Show the timestamp in the sidebar
         st.sidebar.write(f"Current Time: {timestamp}")
 
+        # Show flash message for emergency vehicle detection
+        if emergency_detected:
+            st.success(f"Emergency vehicle detected at {emergency_timestamp}!")
+
         # Update frame counter
-        frame_count += 1
+        frame_count += skip_frames
 
     # Release video capture
     video_file.release()
 
-# Add footer information
+# Footer information
 st.sidebar.write("### About")
 st.sidebar.info("This app uses the YOLO model for real-time object detection. Upload a video to see predictions in action.")
