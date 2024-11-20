@@ -6,7 +6,7 @@ from helper import YOLO_Pred
 import time
 
 # Initialize YOLO_Pred with your model and YAML configuration
-yolo = YOLO_Pred('weights/best.onnx', 'data.yaml')
+yolo = YOLO_Pred('predictions/hell/weights/best.onnx', 'predictions/data.yaml')
 
 # Streamlit app configuration
 st.set_page_config(page_title="YOLO Object Detection", layout="wide")
