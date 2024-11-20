@@ -139,7 +139,7 @@ with tab2:
             st.write("### Detected Objects:")
             for i, (text, box) in enumerate(zip(predicted_texts, boxes)):
                 x, y, w, h = box
-                st.write(f"{i + 1}. **{text}** - Bounding Box: (x={x}, y={y}, w={w}, h={h})")
+                st.write(f"{i + 1}. **{text}**")
         else:
             st.warning("No objects detected. Try uploading a different image.")
 
