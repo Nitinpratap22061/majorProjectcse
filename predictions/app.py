@@ -6,7 +6,7 @@ from helper import YOLO_Pred
 import time
 
 # Initialize YOLO_Pred with your model and YAML configuration
-yolo = YOLO_Pred('predictions/hell/weights/best.onnx', 'predictions/data.yaml')
+yolo = YOLO_Pred('hell/weights/best.onnx', 'data.yaml')
 
 # Streamlit app configuration
 st.set_page_config(page_title="YOLO Object Detection", layout="wide")
@@ -141,10 +141,10 @@ with tab2:
                 x, y, w, h = box
                 st.write(f"{i + 1}. **{text}**")
         else:
-            st.warning("No objects detected. Try uploading a different image.")
+            st.warning("Non Emergency Object Detected")
 
 # Sidebar Information
 st.sidebar.write("### About")
 st.sidebar.info(
-    "This app uses the YOLO model for real-time object detection. Upload a video or image to see predictions in action."
+    "A smart system designed to identify emergency vehicles like ambulances, fire trucks, and police cars in real-time using machine learning."
 )
