@@ -9,8 +9,8 @@ import time
 yolo = YOLO_Pred('predictions/hell/weights/best.onnx', 'predictions/data.yaml')
 
 # Streamlit app configuration
-st.set_page_config(page_title="YOLO Object Detection", layout="wide")
-st.title("🔍 YOLO Object Detection")
+st.set_page_config(page_title="Emergency Vehicle Detection", layout="wide")
+st.title("🔍 Emergency Vehicle  Detection")
 st.write("Upload a video or image to detect objects.")
 
 # Tabs for video and image detection
