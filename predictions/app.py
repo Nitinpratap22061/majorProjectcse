@@ -10,10 +10,10 @@ import time
 yolo = YOLO_Pred('predictions/hell/weights/best.onnx', 'predictions/data.yaml')
 
 # Twilio Configuration
-TWILIO_ACCOUNT_SID = 'AC25c5fc49466cde96a344070b25cb7b2d'  # Replace with your Twilio Account SID
-TWILIO_AUTH_TOKEN = 'e5eeabdc261c9502425c7eb14ef3f3ed'    # Replace with your Twilio Auth Token
-TWILIO_PHONE_NUMBER = '+16814343845'  # Replace with your Twilio phone number
-RECIPIENT_PHONE_NUMBER = '+916205815679'  # Replace with the recipient's phone number
+TWILIO_ACCOUNT_SID = 'AC25c5fc49466cde96a344070b25cb7b2d'  
+TWILIO_AUTH_TOKEN = 'e5eeabdc261c9502425c7eb14ef3f3ed'   
+TWILIO_PHONE_NUMBER = '+16814343845'  
+RECIPIENT_PHONE_NUMBER = '+916205815679'  
 
 # Function to send SMS
 def send_sms(to_phone, message_body):
@@ -75,20 +75,20 @@ with tab1:
 
         # Initialize frame counter and frame rate
         frame_count = 0
-        fps = video_file.get(cv2.CAP_PROP_FPS)
+        fps = video_file.get(cv2.CAP_PROP_FPS # how many frames are displayed per second:
         delay = 1 / fps  # Delay to make video play at correct speed
 
         message_sent = False  # Reset message flag for each new video
 
         while True:
             # Read the next frame
-            ret, frame = video_file.read()
+            ret, frame = video_file.read() #ret bool val frame read sucessfully or not ''frame:-numpy array frame video
             if not ret:
                 st.write("End of video.")
                 break
 
             # Get predictions
-            img_pred, predicted_texts, boxes = yolo.predictions(frame)
+            img_pred, predicted_texts, boxes = yolo.predictions(frame) #img_pred: NumPy array of the frame with bounding boxes drawn predicted_texts: ["emergency : 98%", "car : 95%"] boxes: [[120, 150, 200, 300], [50, 60, 100, 150]]
 
             # Convert BGR to RGB
             img_pred_rgb = cv2.cvtColor(img_pred, cv2.COLOR_BGR2RGB)
