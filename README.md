@@ -1,4 +1,3 @@
-
 Emergency Vehicle Detection Web Application
 
 Table of Contents
@@ -37,8 +36,9 @@ Prerequisites
 
 Steps
 1. Clone the repository:
-    git clone https://github.com/Nitinpratap22061/majorProjectcse.git/tree/master
-   cd emergency-detection-app
+   git clone https://github.com/Nitinpratap22061/majorProjectcse.git
+   cd majorProjectcse
+   git checkout master  # Switch to master branch if not already on it
 
 2. Install dependencies:
    pip install -r requirements.txt
@@ -103,5 +103,5 @@ Contact
 For any queries or contributions, please contact:
 
 - Nitin Pratap
-- Email: pratapnitin87@gmail.com
-- GitHub: https://github.com/Nitinpratap22061/
+- Email: pratapnitin87@gmail.com 
+- GitHub: https://github.com/Nitinpratap22061
