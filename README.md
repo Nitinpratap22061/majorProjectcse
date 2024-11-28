@@ -37,7 +37,7 @@ Prerequisites
 
 Steps
 1. Clone the repository:
-   git clone https://github.com/yourusername/emergency-detection-app.git
+   git clone https://github.com/Nitinpratap22061/emergency-detection-app.git
    cd emergency-detection-app
 
 2. Install dependencies:
