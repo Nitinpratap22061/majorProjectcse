@@ -37,7 +37,7 @@ Prerequisites
 
 Steps
 1. Clone the repository:
-    git clone https://github.com/Nitinpratap22061/majorProjectcse.git
+    git clone https://github.com/Nitinpratap22061/majorProjectcse.git/tree/master
    cd emergency-detection-app
 
 2. Install dependencies:
