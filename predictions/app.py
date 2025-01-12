@@ -75,7 +75,7 @@ with tab1:
 
         # Initialize frame counter and frame rate
         frame_count = 0
-        fps = video_file.get(cv2.CAP_PROP_FPS # how many frames are displayed per second:
+        fps = video_file.get(cv2.CAP_PROP_FPS) # how many frames are displayed per second:
         delay = 1 / fps  # Delay to make video play at correct speed
 
         message_sent = False  # Reset message flag for each new video
